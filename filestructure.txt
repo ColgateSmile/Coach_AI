@@ -1,6 +1,7 @@
 |-- .dist
 |-- .env
 |-- .gitignore
+|-- index.html
 |-- package-lock.json
 |-- package.json
 |-- public
@@ -27,6 +28,7 @@
         |-- index.css
         |-- main.jsx
     |-- vite.config.js
+|-- script.js
 |-- src
     |-- App.css
     |-- App.jsx
@@ -41,3 +43,4 @@
     |-- logo.svg
     |-- reportWebVitals.js
     |-- setupTests.js
+|-- style.css

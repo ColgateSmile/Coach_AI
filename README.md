@@ -2,7 +2,7 @@
 
 Welcome to **Running AI Coach**, your personal AI-powered running assistant! This web application helps runners analyze their performance, generate personalized training plans, and suggest running competitions worldwide. Built with React, Bootstrap, and powered by the OpenAI API, this app is designed to make your running journey smarter and more efficient.
 
-## Features ✨
+## Features
 - **Personalized Training Plans**: Get a customized training plan based on your age, weight, resting heart rate, recent run times, and goal distance.
 - **Goal-Oriented Plans**: Specify your goal distance (e.g., 5k, 10k, half marathon, marathon) and target time to receive a tailored plan.
 - **Dynamic Plan Duration**: The app calculates the optimal training plan duration based on your current fitness level.
@@ -10,21 +10,22 @@ Welcome to **Running AI Coach**, your personal AI-powered running assistant! Thi
 - **Running News**: Stay updated with the latest running news *(coming soon!).*
 - **Diet Plan Integration**: Get personalized diet plans to complement your training *(coming soon!).*
 
-## Screenshots 🖼️
+## Screenshots 
+
+
+![ReactApp-GoogleChrome2025-01-0523-45-27-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/7224f49f-e185-4cd8-9aa0-d4935deb4c13)
 
 
 
 
-
-
-## Technologies Used 🛠️
+## Technologies Used 
 - **Frontend**: React, Bootstrap
 - **Backend**: OpenAI API
 - **Routing**: React Router
 - **Environment Management**: `.env` files
 - **Version Control**: Git, GitHub
 
-## Getting Started 🚀
+## Getting Started 
 Follow these steps to set up and run the Running AI Coach app locally.
 
 ### Prerequisites
@@ -64,7 +65,7 @@ npm start
 5. Open the app:
    - Visit `http://localhost:3000` in your browser.
 
-## Usage 🖥️
+## Usage 
 
 ### Enter Your Details:
 - Fill in your age, weight, resting heart rate, recent run time, goal distance, and goal time.
@@ -75,7 +76,7 @@ npm start
 ### View Results:
 - The training plan will be displayed in a table format, organized by weeks and days.
 
-## Project Structure 📂
+## Project Structure
 ```plaintext
 /running-chat-app
 ├── public/                  # Static assets

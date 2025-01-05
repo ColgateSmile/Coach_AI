@@ -1,0 +1,43 @@
+|-- .dist
+|-- .env
+|-- .gitignore
+|-- package-lock.json
+|-- package.json
+|-- public
+    |-- favicon.ico
+    |-- index.html
+    |-- logo192.png
+    |-- logo512.png
+    |-- manifest.json
+    |-- robots.txt
+|-- README.md
+|-- running-chat-app
+    |-- .gitignore
+    |-- eslint.config.js
+    |-- index.html
+    |-- package.json
+    |-- public
+        |-- vite.svg
+    |-- README.md
+    |-- src
+        |-- App.css
+        |-- App.jsx
+        |-- assets
+            |-- react.svg
+        |-- index.css
+        |-- main.jsx
+    |-- vite.config.js
+|-- src
+    |-- App.css
+    |-- App.jsx
+    |-- App.test.js
+    |-- components
+        |-- Footer.jsx
+        |-- Header.jsx
+        |-- Results.jsx
+        |-- UserDataForm.jsx
+    |-- index.css
+    |-- index.js
+    |-- logo.svg
+    |-- reportWebVitals.js
+    |-- setupTests.js

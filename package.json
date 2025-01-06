@@ -3,15 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-pdf/renderer": "^4.1.6",
+    "@tanstack/react-table": "^8.20.6",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "cheerio": "^1.0.0",
     "cra-template": "1.2.0",
+    "file-saver": "^2.0.5",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.7",
+    "react-csv": "^2.2.2",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^4.2.4"
   },
   "scripts": {

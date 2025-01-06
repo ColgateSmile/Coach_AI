@@ -38,6 +38,7 @@
         |-- Header.jsx
         |-- Results.jsx
         |-- UserDataForm.jsx
+    |-- dataSources.js
     |-- index.css
     |-- index.js
     |-- logo.svg
@@ -48,4 +49,7 @@
         |-- RunningNews.jsx
     |-- reportWebVitals.js
     |-- setupTests.js
+    |-- utils
+        |-- generateResponseWithRAG.js
+        |-- scrapeWebsite.js
 |-- style.css

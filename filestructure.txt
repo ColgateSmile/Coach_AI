@@ -41,6 +41,11 @@
     |-- index.css
     |-- index.js
     |-- logo.svg
+    |-- pages
+        |-- Chat.jsx
+        |-- DietPlan.jsx
+        |-- Home.jsx
+        |-- RunningNews.jsx
     |-- reportWebVitals.js
     |-- setupTests.js
 |-- style.css

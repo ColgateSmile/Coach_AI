@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
 import { CSVLink } from 'react-csv';
 import { Document, Page, Text, View, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
@@ -29,25 +29,44 @@ const styles = StyleSheet.create({
 });
 
 const Results = ({ results }) => {
-  if (!results) {
-    return <div>No training program available.</div>;
-  }
+  // Parse the results into a structured training plan
+  const parseTrainingPlan = (results) => {
+    if (!results) return [];
 
-  const [data, setData] = useState(() => {
-    // Parse the training program into an array of weeks
+    const trainingPlan = [];
+
+    // Split the results into weeks
     const weeks = results.split('Week ');
-    return weeks.slice(1).map((week) => {
-      const [weekNumber, activities] = week.split(':\n');
-      return {
-        week: `Week ${weekNumber.trim()}`,
-        activities: activities.split('\n').filter((line) => line.trim()),
-        runVolume: '',
-        targetTime: '',
-        targetBenefit: '',
-        targetHRZone: '',
-      };
+    weeks.slice(1).forEach((week, weekIndex) => {
+      const [, activities] = week.split(':\n');
+      activities.split('\n').forEach((activity, dayIndex) => {
+        const trimmedActivity = activity.trim();
+        if (trimmedActivity) {
+          // Extract activity details (e.g., "Day 1: Easy run - 5 km, 70% of max HR, 30 minutes, Endurance")
+          const [, activityDetails] = trimmedActivity.split(': ');
+          if (activityDetails) {
+            const [activityType, ...details] = activityDetails.split(' - ');
+            const [distance, goalHR, goalTime, trainingFocus] = details[0].split(', ');
+
+            trainingPlan.push({
+              week: weekIndex + 1,
+              day: dayIndex + 1,
+              distance: distance.replace(' km', '').trim(),
+              activity: activityType.trim(),
+              goalHR: goalHR || '',
+              goalTime: goalTime || '',
+              trainingFocus: trainingFocus || '',
+            });
+          }
+        }
+      });
     });
-  });
+
+    return trainingPlan;
+  };
+
+  // Use useMemo to avoid recalculating data on every render
+  const data = useMemo(() => parseTrainingPlan(results), [results]);
 
   const columns = [
     {
@@ -55,79 +74,28 @@ const Results = ({ results }) => {
       accessorKey: 'week',
     },
     {
-      header: 'Activities',
-      accessorKey: 'activities',
-      cell: ({ row }) => (
-        <ul>
-          {row.original.activities.map((activity, index) => (
-            <li key={index}>{activity.replace('- ', '')}</li>
-          ))}
-        </ul>
-      ),
+      header: 'Day',
+      accessorKey: 'day',
     },
     {
-      header: 'Run Volume',
-      accessorKey: 'runVolume',
-      cell: ({ row }) => (
-        <input
-          type="text"
-          value={row.original.runVolume}
-          onChange={(e) => {
-            const newData = [...data];
-            newData[row.index].runVolume = e.target.value;
-            setData(newData);
-          }}
-        />
-      ),
+      header: 'Distance (km)',
+      accessorKey: 'distance',
     },
     {
-      header: 'Target Time',
-      accessorKey: 'targetTime',
-      cell: ({ row }) => (
-        <input
-          type="text"
-          value={row.original.targetTime}
-          onChange={(e) => {
-            const newData = [...data];
-            newData[row.index].targetTime = e.target.value;
-            setData(newData);
-          }}
-        />
-      ),
+      header: 'Activity',
+      accessorKey: 'activity',
     },
     {
-      header: 'Target Benefit',
-      accessorKey: 'targetBenefit',
-      cell: ({ row }) => (
-        <select
-          value={row.original.targetBenefit}
-          onChange={(e) => {
-            const newData = [...data];
-            newData[row.index].targetBenefit = e.target.value;
-            setData(newData);
-          }}
-        >
-          <option value="">Select</option>
-          <option value="Aerobic">Aerobic</option>
-          <option value="Technic">Technic</option>
-          <option value="Strength">Strength</option>
-        </select>
-      ),
+      header: 'Goal HR',
+      accessorKey: 'goalHR',
     },
     {
-      header: 'Target HR Zone',
-      accessorKey: 'targetHRZone',
-      cell: ({ row }) => (
-        <input
-          type="text"
-          value={row.original.targetHRZone}
-          onChange={(e) => {
-            const newData = [...data];
-            newData[row.index].targetHRZone = e.target.value;
-            setData(newData);
-          }}
-        />
-      ),
+      header: 'Goal Time',
+      accessorKey: 'goalTime',
+    },
+    {
+      header: 'Training Focus',
+      accessorKey: 'trainingFocus',
     },
   ];
 
@@ -140,11 +108,12 @@ const Results = ({ results }) => {
   // Download as CSV
   const csvData = data.map((row) => ({
     Week: row.week,
-    Activities: row.activities.join(', '),
-    'Run Volume': row.runVolume,
-    'Target Time': row.targetTime,
-    'Target Benefit': row.targetBenefit,
-    'Target HR Zone': row.targetHRZone,
+    Day: row.day,
+    'Distance (km)': row.distance,
+    Activity: row.activity,
+    'Goal HR': row.goalHR,
+    'Goal Time': row.goalTime,
+    'Training Focus': row.trainingFocus,
   }));
 
   // Download as PDF
@@ -160,24 +129,27 @@ const Results = ({ results }) => {
             ))}
           </View>
           {data.map((row) => (
-            <View key={row.week} style={styles.tableRow}>
+            <View key={`${row.week}-${row.day}`} style={styles.tableRow}>
               <View style={styles.tableCell}>
                 <Text>{row.week}</Text>
               </View>
               <View style={styles.tableCell}>
-                <Text>{row.activities.join(', ')}</Text>
+                <Text>{row.day}</Text>
               </View>
               <View style={styles.tableCell}>
-                <Text>{row.runVolume}</Text>
+                <Text>{row.distance} km</Text>
               </View>
               <View style={styles.tableCell}>
-                <Text>{row.targetTime}</Text>
+                <Text>{row.activity}</Text>
               </View>
               <View style={styles.tableCell}>
-                <Text>{row.targetBenefit}</Text>
+                <Text>{row.goalHR}</Text>
               </View>
               <View style={styles.tableCell}>
-                <Text>{row.targetHRZone}</Text>
+                <Text>{row.goalTime}</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text>{row.trainingFocus}</Text>
               </View>
             </View>
           ))}
@@ -186,9 +158,13 @@ const Results = ({ results }) => {
     </Document>
   );
 
+  if (!results) {
+    return <div>No training program available.</div>;
+  }
+
   return (
     <div className="mt-4">
-      <h3>Training Program</h3>
+      <h3>Training Plan</h3>
       <table className="table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -215,12 +191,12 @@ const Results = ({ results }) => {
       </table>
 
       <div className="mt-4">
-        <CSVLink data={csvData} filename="training-program.csv" className="btn btn-primary me-2">
+        <CSVLink data={csvData} filename="training-plan.csv" className="btn btn-primary me-2">
           Download as CSV
         </CSVLink>
         <PDFDownloadLink
           document={<MyDocument />}
-          fileName="training-program.pdf"
+          fileName="training-plan.pdf"
           className="btn btn-secondary"
         >
           {({ blob, url, loading, error }) =>

@@ -25,14 +25,21 @@ const App = () => {
     const planDuration = getPlanDuration(recentPace, goalDistance);
 
     const prompt = `Create a ${planDuration}-week running training program for a ${age}-year-old runner weighing ${weight} kg with a resting heart rate of ${hr} bpm and a recent run time of ${time}. The runner's goal is to complete a ${goalDistance} in ${goalTime}. The runner can train ${trainingDays} days per week. Format the program as follows:
+
+Week [X]:
+- Day 1: [Activity Type] - [Distance] km, [Goal HR], [Goal Time], [Training Focus]
+- Day 2: [Activity Type] - [Distance] km, [Goal HR], [Goal Time], [Training Focus]
+- Day 3: [Activity Type] - [Distance] km, [Goal HR], [Goal Time], [Training Focus]
+- Day 4: [Activity Type] - [Distance] km, [Goal HR], [Goal Time], [Training Focus]
+
+Example:
 Week 1:
-- Day 1: Activity
-- Day 2: Activity
-...
-Week 2:
-- Day 1: Activity
-- Day 2: Activity
-...`;
+- Day 1: Easy run - 5 km, 70% of max HR, 30 minutes, Endurance
+- Day 2: Rest - 0 km, N/A, N/A, Recovery
+- Day 3: Interval training - 8 km, 85% of max HR, 40 minutes, Speed
+- Day 4: Rest - 0 km, N/A, N/A, Recovery
+
+Ensure the program includes a variety of activities such as easy runs, interval training, tempo runs, and long runs.`;
 
     setLoading(true);
     try {
@@ -41,7 +48,7 @@ Week 2:
         {
           model: 'gpt-3.5-turbo',
           messages: [{ role: 'user', content: prompt }],
-          max_tokens: 500,
+          max_tokens: 1000, // Increased to accommodate detailed output
         },
         {
           headers: {
